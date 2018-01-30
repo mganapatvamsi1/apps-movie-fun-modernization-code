@@ -4,3 +4,5 @@ classes
 build
 .idea
 .env
+gradle/
+.gradle/
