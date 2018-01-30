@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.superbiz.moviefun;
+package org.superbiz.moviefun.movies;
 
-import org.apache.commons.lang.StringUtils;
+
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.superbiz.moviefun.movies.Movie;
 import org.superbiz.moviefun.movies.MoviesBean;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +33,17 @@ import java.util.List;
  * @version $Revision$ $Date$
  */
 @Component
-public class ActionServlet extends HttpServlet {
+public class MovieServlet extends HttpServlet {
 
     private static final long serialVersionUID = -5832176047021911038L;
 
     public static int PAGE_SIZE = 5;
 
-    @EJB
     private MoviesBean moviesBean;
+
+    public MovieServlet(MoviesBean moviesBean) {
+        this.moviesBean = moviesBean;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
