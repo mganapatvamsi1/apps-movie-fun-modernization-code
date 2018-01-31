@@ -29,7 +29,7 @@ import javax.persistence.metamodel.EntityType;
 import java.util.List;
 
 @Repository
-public class MoviesBean {
+public class MoviesRepository {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -69,15 +69,6 @@ public class MoviesBean {
         return entityManager.createQuery(cq).getResultList();
     }
 
-    public List<Movie> findAll(int firstResult, int maxResults) {
-        CriteriaQuery<Movie> cq = entityManager.getCriteriaBuilder().createQuery(Movie.class);
-        cq.select(cq.from(Movie.class));
-        TypedQuery<Movie> q = entityManager.createQuery(cq);
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
-        return q.getResultList();
-    }
-
     public int countAll() {
         CriteriaQuery<Long> cq = entityManager.getCriteriaBuilder().createQuery(Long.class);
         Root<Movie> rt = cq.from(Movie.class);
@@ -99,6 +90,15 @@ public class MoviesBean {
         cq.where(condition);
 
         return entityManager.createQuery(cq).getSingleResult().intValue();
+    }
+
+    public List<Movie> findAll(int firstResult, int maxResults) {
+        CriteriaQuery<Movie> cq = entityManager.getCriteriaBuilder().createQuery(Movie.class);
+        cq.select(cq.from(Movie.class));
+        TypedQuery<Movie> q = entityManager.createQuery(cq);
+        q.setMaxResults(maxResults);
+        q.setFirstResult(firstResult);
+        return q.getResultList();
     }
 
     public List<Movie> findRange(String field, String searchTerm, int firstResult, int maxResults) {
