@@ -26,7 +26,7 @@ public class AlbumsApiController {
     }
 
     @PostMapping
-    public void addAlbum(Album album) {
+    public void addAlbum(@RequestBody Album album) {
         albumsRepository.addAlbum(album);
     }
 }
