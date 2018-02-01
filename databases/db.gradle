@@ -1,0 +1,44 @@
+import groovy.json.JsonSlurper
+
+def getMysqlCredentials(cfAppName) {
+    def process = "cf env $cfAppName".execute()
+    def rawText = process.text
+
+    process.waitFor()
+
+    if (process.exitValue() != 0) {
+        return extension
+    }
+
+    def vcapServices = new JsonSlurper().parseText(
+            rawText
+                    .replace("\n", "")
+                    .split("System-Provided:")[1]
+                    .split("VCAP_APPLICATION")[0][0..-4]
+    )["VCAP_SERVICES"]
+
+    return vcapServices?.getAt("p-mysql")?.getAt(0)?.getAt("credentials")
+}
+
+ext.setupProdFlywayExtension = { extension, cfAppName ->
+    def mysqlCredentials = getMysqlCredentials(cfAppName)
+
+    if (mysqlCredentials != null) {
+        def databaseName = mysqlCredentials["name"]
+        def user = mysqlCredentials["username"]
+        def password = mysqlCredentials["password"]
+        def url = "jdbc:mysql://127.0.0.1:63306/" + databaseName
+
+        extension.user = user
+        extension.password = password
+        extension.url = url
+    }
+
+    return extension
+}
+
+ext.getMysqlHost = { cfAppName ->
+    def mysqlCredentials = getMysqlCredentials(cfAppName)
+
+    return mysqlCredentials["hostname"]
+}
