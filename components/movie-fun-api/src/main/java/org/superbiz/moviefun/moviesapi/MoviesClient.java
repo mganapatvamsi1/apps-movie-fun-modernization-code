@@ -73,9 +73,7 @@ public class MoviesClient {
     }
 
     public List<MovieInfo> getMovies() {
-        ResponseEntity<List<MovieInfo>> responseEntity =
-                restOperations.exchange(moviesUrl, HttpMethod.GET, null, movieListType);
-        return responseEntity.getBody();
+        return restOperations.exchange(moviesUrl, HttpMethod.GET, null, movieListType).getBody();
     }
 
 
